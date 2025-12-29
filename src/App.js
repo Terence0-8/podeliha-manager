@@ -24,7 +24,7 @@ const firebaseConfig = {
   measurementId: "G-9PMPR10RQV"
 };
 
-const appId = typeof __app_id !== 'undefined' ? __app_id : 'podeliha-manager-v1';
+const appId = 'projet-immo-local';
 
 let db, auth;
 if (firebaseConfig) {
@@ -164,13 +164,15 @@ const App = () => {
   
   useEffect(() => {
     if (!auth) return;
-    const initAuth = async () => {
-      if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-        await signInWithCustomToken(auth, __initial_auth_token);
-      } else {
-        await signInAnonymously(auth);
-      }
-    };
+   const initAuth = async () => {
+  // En local, on utilise directement la connexion anonyme
+  try {
+    await signInAnonymously(auth);
+    console.log("Connecté anonymement à Firebase !");
+  } catch (error) {
+    console.error("Erreur de connexion :", error);
+  }
+};
     initAuth();
     return onAuthStateChanged(auth, setUser);
   }, []);
