@@ -540,8 +540,34 @@ const App = () => {
 
              <div className="bg-rose-50 border border-rose-200 rounded-xl p-6">
                 <h3 className="font-bold text-rose-700 flex items-center gap-2 mb-4"><AlertTriangle className="w-5 h-5" /> Aléas</h3>
-                {customBudgetItems.map((item, idx) => ( <div key={idx} className="bg-white p-3 rounded-lg border border-rose-100 mb-2 flex justify-between items-center shadow-sm"><span className="font-medium text-slate-700">{item.label}</span><div className="flex items-center gap-3"><span className="font-bold text-rose-600">{item.cost.toLocaleString()} €</span><button onClick={() => setCustomBudgetItems(prev => prev.filter((_, i) => i !== idx))} className="text-slate-400 hover:text-rose-500"><Trash2 className="w-4 h-4" /></button></div></div> ))}
-                <div className="flex flex-col md:flex-row gap-2 mt-4"><input className="flex-1 border rounded-lg px-3 py-2 text-sm" placeholder="Nom..." value={newExpenseName} onChange={e => setNewExpenseName(e.target.value)} /><input className="w-full md:w-24 border rounded-lg px-3 py-2 text-sm" type="number" placeholder="Coût" value={newExpenseCost} onChange={e => setNewExpenseCost(e.target.value)} /><button onClick={() => { if(newExpenseName && newExpenseCost) { setCustomBudgetItems([...customBudgetItems, {label: newExpenseName, cost: parseFloat(newExpenseCost)}]); setNewExpenseName(''); setNewExpenseCost(''); } }} className="bg-rose-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-rose-600 flex items-center justify-center gap-2"><Plus className="w-4 h-4" /> Ajouter</button></div>
+                {customBudgetItems.map((item, idx) => ( 
+                    <div key={idx} className="bg-white p-3 rounded-lg border border-rose-100 mb-2 flex justify-between items-center shadow-sm">
+                        <span className="font-medium text-slate-700">{item.label}</span>
+                        <div className="flex items-center gap-3">
+                            <span className="font-bold text-rose-600">{item.cost.toLocaleString()} €</span>
+                            <button onClick={() => {
+                                const newData = customBudgetItems.filter((_, i) => i !== idx);
+                                saveData('customBudgetItems', newData);
+                            }} className="text-slate-400 hover:text-rose-500">
+                                <Trash2 className="w-4 h-4" />
+                            </button>
+                        </div>
+                    </div> 
+                ))}
+                <div className="flex flex-col md:flex-row gap-2 mt-4">
+                    <input className="flex-1 border rounded-lg px-3 py-2 text-sm" placeholder="Nom..." value={newExpenseName} onChange={e => setNewExpenseName(e.target.value)} />
+                    <input className="w-full md:w-24 border rounded-lg px-3 py-2 text-sm" type="number" placeholder="Coût" value={newExpenseCost} onChange={e => setNewExpenseCost(e.target.value)} />
+                    <button onClick={() => { 
+                        if(newExpenseName && newExpenseCost) { 
+                            const newData = [...customBudgetItems, {label: newExpenseName, cost: parseFloat(newExpenseCost)}];
+                            saveData('customBudgetItems', newData);
+                            setNewExpenseName(''); 
+                            setNewExpenseCost(''); 
+                        } 
+                    }} className="bg-rose-500 text-white px-4 py-2 rounded-lg font-bold hover:bg-rose-600 flex items-center justify-center gap-2">
+                        <Plus className="w-4 h-4" /> Ajouter
+                    </button>
+                </div>
              </div>
           </div>
         )}
